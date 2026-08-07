@@ -1,0 +1,13 @@
+{
+  "name": "strikeshot-push",
+  "private": true,
+  "type": "module",
+  "description": "Storm proximity push notifications for the StrikeShot iOS app",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
