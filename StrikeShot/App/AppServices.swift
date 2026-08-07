@@ -8,7 +8,7 @@ import SwiftUI
 @MainActor
 @Observable
 final class AppServices {
-    let settings = SettingsStore()
+    let settings: SettingsStore
     let theme = ThemeEngine()
     let feed: LightningFeedController
     let capture: CaptureController

@@ -34,6 +34,13 @@ targets:
         NSPhotoLibraryAddUsageDescription: "StrikeShot speichert deine Blitz-Fotos und -Videos in der Fotomediathek."
         NSSupportsLiveActivities: true
         UIBackgroundModes: [remote-notification, fetch]
+        # Blitzortung's public feed is plain ws:// on port 8080 — there is no TLS
+        # endpoint, so the live map needs this narrow exception to reach it.
+        NSAppTransportSecurity:
+          NSExceptionDomains:
+            blitzortung.org:
+              NSIncludesSubdomains: true
+              NSExceptionAllowsInsecureHTTPLoads: true
         ITSAppUsesNonExemptEncryption: false
     settings:
       base:
