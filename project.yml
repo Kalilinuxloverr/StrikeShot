@@ -1,0 +1,65 @@
+name: StrikeShot
+options:
+  bundleIdPrefix: dev.leonfrohlich
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 1.0.0
+    GENERATE_INFOPLIST_FILE: YES
+targets:
+  StrikeShot:
+    type: application
+    platform: iOS
+    sources:
+      - StrikeShot
+    dependencies:
+      - target: StrikeShotWidgets
+        embed: true
+    info:
+      path: StrikeShot/Info.plist
+      properties:
+        CFBundleDisplayName: StrikeShot
+        CFBundleDevelopmentRegion: de
+        CFBundleLocalizations: [de, en]
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        NSCameraUsageDescription: "StrikeShot nutzt die Kamera, um Blitze automatisch zu fotografieren und zu filmen."
+        NSMicrophoneUsageDescription: "StrikeShot hört nach dem Blitz auf den Donner, um die Entfernung des Einschlags zu berechnen."
+        NSLocationWhenInUseUsageDescription: "StrikeShot zeigt Blitze in deiner Umgebung und warnt, wenn ein Gewitter näher kommt."
+        NSPhotoLibraryAddUsageDescription: "StrikeShot speichert deine Blitz-Fotos und -Videos in der Fotomediathek."
+        NSSupportsLiveActivities: true
+        UIBackgroundModes: [remote-notification, fetch]
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.leonfrohlich.strikeshot
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
+  StrikeShotWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Widgets
+      - path: StrikeShot/Shared
+    info:
+      path: Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: StrikeShot Widgets
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.leonfrohlich.strikeshot.widgets
+        TARGETED_DEVICE_FAMILY: "1"
+  StrikeShotTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    dependencies:
+      - target: StrikeShot

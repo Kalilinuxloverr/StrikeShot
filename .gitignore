@@ -1,0 +1,12 @@
+*.xcodeproj/
+DerivedData/
+build/
+.DS_Store
+xcuserdata/
+*.xcuserstate
+.swiftpm/
+.claude/settings.local.json
+Server/node_modules/
+Server/.vercel/
+Server/.env*
+*.p8
