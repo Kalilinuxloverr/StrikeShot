@@ -7,40 +7,45 @@ import SwiftData
 @MainActor
 @Observable
 final class StormLogStore {
-    let container: ModelContainer
+    /// Nil only if SwiftData refuses both on-disk and in-memory storage. The diary
+    /// is then unavailable, but camera, map and alerts keep working — losing the
+    /// log is annoying, crashing mid-storm is not.
+    let container: ModelContainer?
     private(set) var activeSession: StormSession?
     private(set) var lastError: String?
+
+    private var context: ModelContext? { container?.mainContext }
 
     init() {
         let schema = Schema([StormSession.self, CaptureRecord.self])
         do {
             container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema))
         } catch {
-            lastError = String(
-                localized: "log.error.storage",
-                defaultValue: "Tagebuch-Speicher konnte nicht geöffnet werden – neue Sessions gehen beim Beenden verloren."
+            container = try? ModelContainer(
+                for: schema,
+                configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
             )
-            do {
-                container = try ModelContainer(
-                    for: schema,
-                    configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+            lastError = container == nil
+                ? String(
+                    localized: "log.error.unavailable",
+                    defaultValue: "Das Tagebuch ist auf diesem Gerät nicht verfügbar. Aufnehmen, Karte und Warnungen funktionieren weiterhin."
                 )
-            } catch {
-                // ponytail: static schema, in-memory creation cannot realistically fail;
-                // if SwiftData is this broken there is nothing left to fall back to.
-                fatalError("SwiftData cannot create an in-memory container: \(error)")
-            }
+                : String(
+                    localized: "log.error.storage",
+                    defaultValue: "Tagebuch-Speicher konnte nicht geöffnet werden – neue Sessions gehen beim Beenden verloren."
+                )
         }
         closeDanglingSessions()
     }
 
     func beginSession(at point: GeoPoint?, snapshot: StormSnapshot) {
+        guard let context else { return }
         if activeSession != nil { endSession(snapshot: snapshot) }
         let session = StormSession(start: .now, point: point)
         session.maxStrikeCount = snapshot.strikeCount
         session.nearestStrikeMeters = snapshot.nearestDistanceMeters
         session.peakIntensity = snapshot.intensity
-        container.mainContext.insert(session)
+        context.insert(session)
         activeSession = session
         save()
         if let point { resolvePlaceName(for: session, point: point) }
@@ -55,6 +60,7 @@ final class StormLogStore {
     }
 
     func record(_ result: CaptureResult, snapshot: StormSnapshot?) {
+        guard let context else { return }
         let session: StormSession
         if let active = activeSession {
             session = active
@@ -65,7 +71,7 @@ final class StormLogStore {
             session = started
         }
         let record = CaptureRecord(result: result)
-        container.mainContext.insert(record)
+        context.insert(record)
         record.session = session
         if let snapshot { apply(snapshot, to: session) }
         // ponytail: scoring runs synchronously on the main actor; the decode is
@@ -79,8 +85,9 @@ final class StormLogStore {
     }
 
     func sessions() -> [StormSession] {
+        guard let context else { return [] }
         do {
-            return try container.mainContext.fetch(
+            return try context.fetch(
                 FetchDescriptor<StormSession>(sortBy: [SortDescriptor(\.start, order: .reverse)])
             )
         } catch {
@@ -139,8 +146,9 @@ final class StormLogStore {
     }
 
     private func save() {
+        guard let context else { return }
         do {
-            try container.mainContext.save()
+            try context.save()
         } catch {
             lastError = error.localizedDescription
         }
@@ -148,15 +156,16 @@ final class StormLogStore {
 
     /// Sessions left open by a crash or force-quit get closed at launch.
     private func closeDanglingSessions() {
+        guard let context else { return }
         do {
-            let open = try container.mainContext.fetch(
+            let open = try context.fetch(
                 FetchDescriptor<StormSession>(predicate: #Predicate { $0.end == nil })
             )
             guard !open.isEmpty else { return }
             for session in open {
                 session.end = session.captures.map(\.date).max() ?? session.start
             }
-            try container.mainContext.save()
+            try context.save()
         } catch {
             lastError = error.localizedDescription
         }

@@ -1,0 +1,74 @@
+{
+  "sourceLanguage" : "de",
+  "version" : "1.0",
+  "strings" : {
+    "NSCameraUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot nutzt die Kamera, um Blitze automatisch zu fotografieren und zu filmen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot uses the camera to photograph and film lightning automatically."
+          }
+        }
+      }
+    },
+    "NSMicrophoneUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot hört nach dem Blitz auf den Donner, um die Entfernung des Einschlags zu berechnen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot listens for the thunder after a flash to work out how far away the strike was."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot zeigt Blitze in deiner Umgebung und warnt, wenn ein Gewitter näher kommt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot shows lightning around you and warns you when a storm is closing in."
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryAddUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot speichert deine Blitz-Fotos und -Videos in der Fotomediathek."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "StrikeShot saves your lightning photos and videos to your photo library."
+          }
+        }
+      }
+    }
+  }
+}

@@ -60,12 +60,19 @@ Portal und eine Redis-Instanz bei Vercel.
 Ohne Server warnt die App weiterhin, solange sie läuft oder im Hintergrund
 aktualisiert wird.
 
-## 7. Englische Übersetzung nachziehen
+## 7. Sprachen und Icon — schon erledigt
 
-Alle Texte liegen als deutsche Vorgaben im Code und werden beim Build in
-`StrikeShot/Resources/Localizable.xcstrings` gesammelt. In Xcode den String-
-Katalog öffnen, Sprache **English** hinzufügen und übersetzen — reine
-Fleißarbeit, kein Code.
+Deutsch und Englisch sind vollständig übersetzt: 174 Texte in
+`StrikeShot/Resources/Localizable.xcstrings`, dazu die Berechtigungsdialoge in
+`InfoPlist.xcstrings`. Auf Englisch nachsehen:
+
+```sh
+xcrun simctl launch booted dev.leonfrohlich.strikeshot -AppleLanguages '(en)'
+```
+
+Das App-Icon (Blitz mit Radar-Ringen) liegt in
+`StrikeShot/Resources/Assets.xcassets`. Zum Ändern reicht es, eine neue
+`icon-1024.png` an dieselbe Stelle zu legen.
 
 ## Was bewusst einfach gehalten ist
 

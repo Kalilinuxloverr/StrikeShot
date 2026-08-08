@@ -10,3 +10,5 @@ Server/node_modules/
 Server/.vercel/
 Server/.env*
 *.p8
+StrikeShot/Info.plist
+Widgets/Info.plist

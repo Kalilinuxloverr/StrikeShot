@@ -47,7 +47,6 @@ struct RootView: View {
                 .tag(Tab.settings)
         }
         .tint(theme.accent)
-        .modelContainer(services.log.container)
         .overlay(alignment: .top) { alertOverlay }
     }
 

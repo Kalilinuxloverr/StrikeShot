@@ -7,8 +7,40 @@ struct StormLogScreen: View {
     @Environment(AppServices.self) private var services
 
     var body: some View {
-        SessionListView(storageError: services.log.lastError)
-            .modelContainer(services.log.container)
+        // No container means SwiftData is unusable on this device. `@Query` traps
+        // on a missing container, so the list must not be built in that case.
+        if let container = services.log.container {
+            SessionListView(storageError: services.log.lastError)
+                .modelContainer(container)
+        } else {
+            StorageUnavailableView(message: services.log.lastError)
+        }
+    }
+}
+
+/// Shown when SwiftData cannot provide storage at all.
+struct StorageUnavailableView: View {
+    @Environment(\.stormTheme) private var theme
+    let message: String?
+
+    var body: some View {
+        NavigationStack {
+            ContentUnavailableView {
+                Label {
+                    Text(String(localized: "log.unavailable.title", defaultValue: "Tagebuch nicht verfügbar"))
+                } icon: {
+                    Image(systemName: "externaldrive.badge.exclamationmark")
+                        .foregroundStyle(theme.danger)
+                }
+            } description: {
+                Text(message ?? String(
+                    localized: "log.unavailable.body",
+                    defaultValue: "Der Speicher lässt sich auf diesem Gerät nicht öffnen. Aufnehmen, Karte und Warnungen funktionieren weiterhin."
+                ))
+            }
+            .background(theme.background)
+            .navigationTitle(String(localized: "tab.log", defaultValue: "Tagebuch"))
+        }
     }
 }
 
