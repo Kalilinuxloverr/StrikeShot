@@ -12,3 +12,4 @@ Server/.env*
 *.p8
 StrikeShot/Info.plist
 Widgets/Info.plist
+Signing.local.xcconfig

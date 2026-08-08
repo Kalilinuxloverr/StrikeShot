@@ -1,0 +1,14 @@
+// Signing configuration.
+//
+// A personal Team ID does not belong in a public repository, so it lives in
+// Signing.local.xcconfig, which git ignores. Create that file with one line:
+//
+//     DEVELOPMENT_TEAM = YOURTEAMID
+//
+// Find your Team ID with:
+//     security find-certificate -c "Apple Development" -p | openssl x509 -noout -subject
+// It is the OU= value.
+//
+// The `?` makes the include optional: without the file the project still
+// generates and still builds for the simulator. Only device builds need a team.
+#include? "Signing.local.xcconfig"

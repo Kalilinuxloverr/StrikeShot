@@ -16,13 +16,22 @@ open StrikeShot.xcodeproj
 Nach jedem `git pull`, der neue Swift-Dateien bringt, `xcodegen generate` erneut
 laufen lassen.
 
-## 2. Signing setzen (5 Minuten)
+## 2. Signing — schon eingerichtet
 
-In Xcode für **beide** Targets (`StrikeShot` und `StrikeShotWidgets`):
+Deine Team-ID steht in `Signing.local.xcconfig`. Die Datei ist absichtlich **nicht**
+im Repo: Sie gehört zu dir, nicht zu einem öffentlichen Projekt. `project.yml`
+bindet sie über `Signing.xcconfig` ein, beide Targets bekommen das Team
+automatisch. Ein Gerätebuild ist damit bereits erfolgreich durchgelaufen, die
+Provisioning-Profile hat Xcode selbst angelegt.
 
-- *Signing & Capabilities* → **Team** auswählen
-- Die Bundle-IDs sind `dev.leonfrohlich.strikeshot` und `…strikeshot.widgets`.
-  Falls die schon vergeben sind, in `project.yml` das Präfix ändern und neu generieren.
+Falls die Datei mal fehlt (frischer Klon, anderer Rechner):
+
+```sh
+echo "DEVELOPMENT_TEAM = 7BT7N2JPSQ" > Signing.local.xcconfig
+xcodegen generate
+```
+
+Die Bundle-IDs sind `dev.leonfrohlich.strikeshot` und `…strikeshot.widgets`.
 
 ## 3. Aufs Gerät bauen
 
